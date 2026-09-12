@@ -1,0 +1,439 @@
+.stats-page {
+  padding-bottom: 280rpx;
+}
+
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  padding: 12rpx 40rpx 20rpx;
+  background: var(--surface);
+  box-shadow: 0 -8rpx 28rpx rgba(0, 0, 0, 0.08);
+}
+
+.dock-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scope-switch {
+  display: flex;
+  border: 1rpx solid var(--line);
+  background: var(--surface);
+}
+
+.scope {
+  min-width: 76rpx;
+  padding: 10rpx 0;
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--muted);
+}
+
+.scope + .scope {
+  border-left: 1rpx solid var(--line);
+}
+
+.scope.active {
+  color: var(--text);
+  background: #f3f3f3;
+  box-shadow: inset 0 0 0 1rpx var(--text);
+}
+
+.dock-actions {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  margin-left: 16rpx;
+}
+
+.pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  min-width: 160rpx;
+  padding: 10rpx 28rpx;
+  border: 1rpx solid var(--line);
+  background: var(--surface);
+}
+
+.pill:active {
+  opacity: 0.7;
+}
+
+.search-icon {
+  width: 26rpx;
+  height: 26rpx;
+}
+
+.pill-text {
+  font-size: 24rpx;
+}
+
+.period-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28rpx;
+  margin-bottom: 8rpx;
+}
+
+.nav {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: var(--text);
+}
+
+.nav.disabled {
+  color: #ddd;
+  pointer-events: none;
+}
+
+.period-inner {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 8rpx 8rpx;
+}
+
+.period-inner:active {
+  opacity: 0.55;
+}
+
+.period-text {
+  font-size: 30rpx;
+  font-weight: 500;
+  letter-spacing: 2rpx;
+}
+
+.calendar-icon {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.overview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 56rpx;
+}
+
+.overview-label {
+  font-size: 24rpx;
+}
+
+.overview-value {
+  margin-top: 12rpx;
+  font-size: 68rpx;
+  font-weight: 500;
+}
+
+.overview-hint {
+  font-size: 22rpx;
+  margin-bottom: 32rpx;
+}
+
+.pair {
+  display: flex;
+  width: 100%;
+  border-top: 1rpx solid var(--line);
+  border-bottom: 1rpx solid var(--line);
+}
+
+.pair-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+  padding: 24rpx 0;
+  font-size: 24rpx;
+}
+
+.pair-item + .pair-item {
+  border-left: 1rpx solid var(--line);
+}
+
+.pair-value {
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.income {
+  color: var(--income);
+}
+
+.block {
+  margin-bottom: 56rpx;
+}
+
+.block-title {
+  display: block;
+  font-size: 24rpx;
+  margin-bottom: 12rpx;
+}
+
+.block-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 56rpx;
+  padding: 8rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.block-head .block-title {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.block-head:active {
+  opacity: 0.55;
+}
+
+.block-head.plain:active {
+  opacity: 1;
+}
+
+.toggle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48rpx;
+  padding: 0 16rpx 0 20rpx;
+  margin-left: 16rpx;
+  font-size: 22rpx;
+  line-height: 1;
+  color: var(--text);
+  border: 1rpx solid var(--line);
+  background: var(--surface);
+  gap: 4rpx;
+}
+
+.toggle-icon {
+  width: 22rpx;
+  height: 22rpx;
+}
+
+/* 折叠状态下列表末尾的展开条，滚到底也能就近展开 */
+.more {
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: var(--muted);
+}
+
+.more:active {
+  opacity: 0.55;
+}
+
+.advice-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.advice-item:last-child {
+  border-bottom: none;
+}
+
+.dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  margin-top: 14rpx;
+  flex-shrink: 0;
+  background: var(--muted);
+}
+
+.dot-warn {
+  background: #c0392b;
+}
+
+.dot-good {
+  background: var(--income);
+}
+
+.advice-text {
+  flex: 1;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.empty {
+  padding: 60rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  font-size: 26rpx;
+}
+
+.empty-icon {
+  width: 72rpx;
+  height: 72rpx;
+}
+
+.day-group {
+  margin-bottom: 28rpx;
+}
+
+.day-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4rpx;
+  padding-top: 12rpx;
+}
+
+.day-label {
+  font-size: 24rpx;
+  color: var(--muted);
+}
+
+.day-sum {
+  font-size: 22rpx;
+}
+
+.record,
+.month-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.month-row:active {
+  opacity: 0.55;
+}
+
+.delete-icon {
+  width: 36rpx;
+  height: 36rpx;
+  padding: 12rpx 0 12rpx 20rpx;
+  flex-shrink: 0;
+  opacity: 0.4;
+}
+
+.delete-icon:active {
+  opacity: 1;
+}
+
+.record-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex: 1;
+  min-width: 0;
+  padding-right: 16rpx;
+}
+
+.record-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  min-width: 0;
+}
+
+.cat-icon {
+  width: 40rpx;
+  height: 40rpx;
+  flex-shrink: 0;
+}
+
+.record-cat {
+  font-size: 30rpx;
+}
+
+.record-note {
+  font-size: 22rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 420rpx;
+}
+
+.record-amount {
+  font-size: 30rpx;
+  flex-shrink: 0;
+}
+
+.month-sum {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6rpx;
+  font-size: 26rpx;
+  flex-shrink: 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 40rpx;
+  margin-bottom: 36rpx;
+}
+
+.tab {
+  font-size: 28rpx;
+  color: var(--muted);
+  padding-bottom: 8rpx;
+  border-bottom: 4rpx solid transparent;
+}
+
+.tab.active {
+  color: var(--text);
+  border-bottom-color: var(--text);
+}
+
+.stat-row {
+  margin-bottom: 32rpx;
+}
+
+.stat-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12rpx;
+}
+
+.stat-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  min-width: 0;
+}
+
+.stat-name {
+  font-size: 28rpx;
+}
+
+.stat-meta {
+  font-size: 22rpx;
+}
+
+.bar-track {
+  height: 8rpx;
+  background: #ececec;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--text);
+}

@@ -1,0 +1,384 @@
+.record-page {
+  padding-bottom: 700rpx;
+}
+
+.empty {
+  padding-top: 140rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  font-size: 26rpx;
+}
+
+.empty-icon {
+  width: 72rpx;
+  height: 72rpx;
+}
+
+.session {
+  margin-top: 8rpx;
+}
+
+.session-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16rpx;
+  font-size: 24rpx;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.session-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 20rpx;
+  padding-left: 16rpx;
+}
+
+.session-search {
+  width: 32rpx;
+  height: 32rpx;
+  padding: 4rpx;
+  opacity: 0.7;
+}
+
+.session-search:active,
+.session-link:active {
+  opacity: 0.45;
+}
+
+.session-link {
+  font-size: 24rpx;
+}
+
+.record-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.delete-icon {
+  width: 36rpx;
+  height: 36rpx;
+  padding: 12rpx 0 12rpx 20rpx;
+  flex-shrink: 0;
+  opacity: 0.4;
+}
+
+.delete-icon:active {
+  opacity: 1;
+}
+
+.record-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex: 1;
+  min-width: 0;
+  padding-right: 16rpx;
+}
+
+.record-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  min-width: 0;
+}
+
+.cat-icon {
+  width: 36rpx;
+  height: 36rpx;
+  flex-shrink: 0;
+}
+
+.record-cat {
+  font-size: 30rpx;
+}
+
+.record-note {
+  font-size: 22rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 420rpx;
+}
+
+.record-amount {
+  font-size: 30rpx;
+  flex-shrink: 0;
+}
+
+.income {
+  color: var(--income);
+}
+
+.empty-search {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 12rpx;
+  font-size: 24rpx;
+}
+
+.empty-search-icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.empty-search:active {
+  opacity: 0.55;
+}
+
+.pad {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  background: var(--surface);
+  box-shadow: 0 -8rpx 28rpx rgba(0, 0, 0, 0.1);
+  padding: 0 28rpx env(safe-area-inset-bottom);
+}
+
+.pad-tools {
+  display: flex;
+  gap: 12rpx;
+  padding: 16rpx 0 0;
+}
+
+.type-switch {
+  flex: 0 0 200rpx;
+  display: flex;
+  height: 64rpx;
+  border: 1rpx solid var(--text);
+  background: #f6f6f6;
+}
+
+.type-opt {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: var(--muted);
+}
+
+.type-opt.active {
+  color: #fff;
+  background: var(--text);
+  font-weight: 500;
+}
+
+.tool {
+  flex: 1;
+  min-width: 0;
+  height: 64rpx;
+  padding: 0 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: var(--text);
+  background: #f6f6f6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tool:active {
+  opacity: 0.7;
+}
+
+.tool-date {
+  gap: 8rpx;
+}
+
+.tool-icon {
+  width: 28rpx;
+  height: 28rpx;
+  flex-shrink: 0;
+}
+
+.tool-note {
+  gap: 8rpx;
+}
+
+.tool-note.has-note {
+  color: var(--text);
+}
+
+.pad-amount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 108rpx;
+  padding: 0;
+}
+
+.pad-amount-value {
+  max-width: 100%;
+  font-size: 54rpx;
+  font-weight: 500;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pad-amount-value.placeholder {
+  color: #dddddd;
+}
+
+.pad-cats {
+  display: flex;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  padding: 0 0 12rpx;
+  width: 100%;
+}
+
+.cat {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  height: 48rpx;
+  padding: 0 16rpx;
+  margin-right: 12rpx;
+  font-size: 24rpx;
+  color: var(--muted);
+  border: 1rpx solid var(--line);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.cat .cat-icon {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.cat.active {
+  color: var(--text);
+  border-color: var(--text);
+  background: #f3f3f3;
+}
+
+.pad-keys {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.key {
+  width: 25%;
+  height: 96rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface);
+  border-top: 1rpx solid var(--line);
+  border-right: 1rpx solid var(--line);
+  box-sizing: border-box;
+}
+
+.key:nth-child(4n) {
+  border-right: none;
+}
+
+.key:active {
+  background: #f3f3f3;
+}
+
+.key-del-icon {
+  width: 44rpx;
+  height: 44rpx;
+}
+
+.key-save {
+  font-size: 28rpx;
+  color: #fff;
+  background: var(--text);
+}
+
+.key-save:active {
+  opacity: 0.85;
+  background: var(--text);
+}
+
+.note-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 80rpx 48rpx 48rpx;
+}
+
+/* 键盘弹出后把弹窗顶到键盘上方，避免被挡住 */
+.note-mask.lifted {
+  align-items: flex-end;
+  padding-top: 24rpx;
+}
+
+.note-sheet {
+  width: 100%;
+  background: var(--surface);
+  padding: 36rpx 32rpx 28rpx;
+}
+
+.note-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 500;
+  margin-bottom: 20rpx;
+}
+
+.note-area {
+  width: 100%;
+  height: 180rpx;
+  padding: 16rpx;
+  font-size: 28rpx;
+  line-height: 1.5;
+  background: #f6f6f6;
+}
+
+.note-placeholder {
+  color: var(--muted);
+}
+
+.note-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 24rpx;
+  margin-top: 24rpx;
+}
+
+.note-btn {
+  min-width: 120rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: var(--muted);
+}
+
+.note-btn-ok {
+  color: #fff;
+  background: var(--text);
+}
+
+.note-btn:active {
+  opacity: 0.7;
+}

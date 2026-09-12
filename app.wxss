@@ -1,0 +1,37 @@
+page {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --text: #1a1a1a;
+  --muted: #999999;
+  --line: #eeeeee;
+  --expense: #1a1a1a;
+  --income: #2f6b4f;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 28rpx;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+view,
+text,
+input,
+button,
+picker {
+  box-sizing: border-box;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 32rpx 40rpx 48rpx;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.amount {
+  font-variant-numeric: tabular-nums;
+  font-family: "SF Mono", "Menlo", "Courier New", monospace;
+  letter-spacing: -1rpx;
+}

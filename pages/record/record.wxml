@@ -1,0 +1,129 @@
+<view class="page record-page">
+  <view wx:if="{{sessionRecords.length === 0}}" class="empty muted">
+    <image class="empty-icon" src="/assets/icons/empty.png" mode="aspectFit" />
+    <text>从下方键盘记账</text>
+    <view class="empty-search" bindtap="onOpenSearch">
+      <image class="empty-search-icon" src="/assets/icons/search.png" mode="aspectFit" />
+      <text>搜索已有账单</text>
+    </view>
+  </view>
+
+  <view class="session" wx:else>
+    <view class="session-head">
+      <text class="muted amount">{{sessionText}}</text>
+      <view class="session-actions">
+        <image
+          class="session-search"
+          src="/assets/icons/search.png"
+          mode="aspectFit"
+          bindtap="onOpenSearch"
+        />
+        <text class="session-link" bindtap="onGoStats">查看统计 ›</text>
+      </view>
+    </view>
+
+    <view class="record-row" wx:for="{{sessionRecords}}" wx:key="id">
+      <view class="record-left">
+        <image class="cat-icon" src="{{item.icon}}" mode="aspectFit" />
+        <view class="record-meta">
+          <text class="record-cat">{{item.categoryName}}</text>
+          <text class="record-note muted">
+            {{item.dateText}}<text wx:if="{{item.note}}"> · {{item.note}}</text>
+          </text>
+        </view>
+      </view>
+      <text class="record-amount amount {{item.type === 'income' ? 'income' : ''}}">
+        {{item.sign}}¥{{item.amountText}}
+      </text>
+      <image
+        class="delete-icon"
+        src="/assets/icons/trash.png"
+        mode="aspectFit"
+        data-id="{{item.id}}"
+        catchtap="onDeleteRecord"
+      />
+    </view>
+  </view>
+
+  <view class="pad">
+    <view class="pad-tools">
+      <view class="type-switch">
+        <view
+          class="type-opt {{type === 'expense' ? 'active' : ''}}"
+          data-type="expense"
+          bindtap="onSwitchType"
+        >支出</view>
+        <view
+          class="type-opt {{type === 'income' ? 'active' : ''}}"
+          data-type="income"
+          bindtap="onSwitchType"
+        >收入</view>
+      </view>
+      <picker mode="date" value="{{date}}" end="{{today}}" bindchange="onDateChange">
+        <view class="tool tool-date">
+          <image class="tool-icon" src="/assets/icons/calendar.png" mode="aspectFit" />
+          <text>{{dateLabel}}</text>
+        </view>
+      </picker>
+      <view class="tool tool-note {{note ? 'has-note' : ''}}" bindtap="onOpenNote">
+        <image class="tool-icon" src="/assets/icons/note.png" mode="aspectFit" />
+        <text>{{noteLabel}}</text>
+      </view>
+    </view>
+
+    <view class="pad-amount">
+      <text class="pad-amount-value amount {{amount ? '' : 'placeholder'}}">{{amountView}}</text>
+    </view>
+
+    <scroll-view class="pad-cats" scroll-x enable-flex>
+      <view
+        class="cat {{categoryId === item.id ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+        bindtap="onSelectCategory"
+      >
+        <image class="cat-icon" src="{{item.icon}}" mode="aspectFit" />
+        <text>{{item.name}}</text>
+      </view>
+    </scroll-view>
+
+    <view class="pad-keys">
+      <view
+        class="key key-{{item.kind}}"
+        wx:for="{{padKeys}}"
+        wx:key="id"
+        data-kind="{{item.kind}}"
+        data-key="{{item.value}}"
+        bindtap="onKeyTap"
+        bindlongpress="onKeyLong"
+      >
+        <image wx:if="{{item.kind === 'del'}}" class="key-del-icon" src="/assets/icons/backspace.png" mode="aspectFit" />
+        <text wx:elif="{{item.kind === 'save'}}">{{saveAsBackTop ? '回顶' : '保存'}}</text>
+        <text wx:else>{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="note-mask {{keyboardHeight ? 'lifted' : ''}}" wx:if="{{noteOpen}}" catchtouchmove="true" style="padding-bottom: {{keyboardHeight}}px;">
+    <view class="note-sheet">
+      <text class="note-title">备注</text>
+      <textarea
+        class="note-area"
+        value="{{noteDraft}}"
+        maxlength="40"
+        focus
+        adjust-position="{{false}}"
+        cursor-spacing="40"
+        placeholder="写一句备注"
+        placeholder-class="note-placeholder"
+        bindinput="onNoteDraft"
+      />
+      <view class="note-actions">
+        <view class="note-btn" bindtap="onNoteCancel">取消</view>
+        <view class="note-btn note-btn-ok" bindtap="onNoteConfirm">确定</view>
+      </view>
+    </view>
+  </view>
+</view>
