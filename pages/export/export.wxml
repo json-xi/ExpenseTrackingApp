@@ -1,0 +1,24 @@
+<view class="page">
+  <text class="hint muted">导出当前账本「{{bookName}}」的账单。复制后可粘贴到备忘录、表格或微信。</text>
+
+  <view class="card head">
+    <text>{{bookName}} · 共 {{count}} 笔</text>
+  </view>
+
+  <view class="card list">
+    <view class="row" wx:for="{{rows}}" wx:key="id">
+      <view class="row-main">
+        <text class="row-cat">{{item.categoryName}}</text>
+        <text class="row-meta muted">{{item.date}} · {{item.typeName}}<text wx:if="{{item.note}}"> · {{item.note}}</text></text>
+      </view>
+      <text class="row-amount amount {{item.income ? 'income' : ''}}">
+        {{item.income ? '+' : '-'}}¥{{item.amountText}}
+      </text>
+    </view>
+  </view>
+
+  <view class="actions">
+    <view class="btn" bindtap="onCopy">复制账单</view>
+    <view class="btn btn-primary" bindtap="onShare">发给微信好友</view>
+  </view>
+</view>

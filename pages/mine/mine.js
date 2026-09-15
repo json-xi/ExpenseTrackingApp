@@ -10,16 +10,21 @@ Page({
     logged: false,
     overall: { count: 0, days: 0, firstDate: '' },
     firstDateText: '—',
-    feedbackCount: 0
+    feedbackCount: 0,
+    bookName: ''
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 2 })
+    }
     this.loadProfile()
     const overall = store.getOverallStats()
     this.setData({
       overall,
       firstDateText: overall.firstDate ? overall.firstDate.slice(5) : '—',
-      feedbackCount: store.getFeedbackCount()
+      feedbackCount: store.getFeedbackCount(),
+      bookName: store.getCurrentBook().name
     })
   },
 
@@ -44,6 +49,10 @@ Page({
     this.loadProfile()
   },
 
+  onOpenBooks() {
+    wx.navigateTo({ url: '/pages/books/books' })
+  },
+
   onFeedback() {
     wx.navigateTo({ url: '/pages/feedback/feedback' })
   },
@@ -53,37 +62,7 @@ Page({
       wx.showToast({ title: '还没有账单可导出', icon: 'none' })
       return
     }
-    const filePath = wx.env.USER_DATA_PATH + '/账单.csv'
-    wx.getFileSystemManager().writeFile({
-      filePath: filePath,
-      data: store.exportCsv(),
-      encoding: 'utf8',
-      success: () => this.shareExport(filePath),
-      fail: () => wx.showToast({ title: '导出失败', icon: 'none' })
-    })
-  },
-
-  shareExport(filePath) {
-    const openFile = () => {
-      wx.openDocument({
-        filePath: filePath,
-        showMenu: true,
-        fail: () => wx.showToast({ title: '导出失败', icon: 'none' })
-      })
-    }
-    if (!wx.shareFileMessage) {
-      openFile()
-      return
-    }
-    wx.shareFileMessage({
-      filePath: filePath,
-      fileName: '账单.csv',
-      fail: (err) => {
-        const msg = (err && err.errMsg) || ''
-        if (msg.indexOf('cancel') !== -1) return
-        openFile()
-      }
-    })
+    wx.navigateTo({ url: '/pages/export/export' })
   },
 
   onLogout() {

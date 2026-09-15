@@ -1,14 +1,24 @@
 page {
-  --bg: #fafafa;
+  --bg: #eef4f2;
   --surface: #ffffff;
-  --text: #1a1a1a;
-  --muted: #999999;
-  --line: #eeeeee;
-  --expense: #1a1a1a;
-  --income: #2f6b4f;
+  --text: #243330;
+  --muted: #7a8884;
+  --line: #dce8e4;
+  --fill: #e7f1ee;
+  --brand: #2a8a7a;
+  --brand-soft: #d8efe9;
+  --expense: #d15a4a;
+  --income: #2a8a7a;
+  --warn: #d15a4a;
+  --tab-bar-h: 108rpx;
+  --radius: 24rpx;
+  --radius-lg: 32rpx;
+  --shadow: 0 12rpx 40rpx rgba(36, 51, 48, 0.07);
   background: var(--bg);
   color: var(--text);
+  font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
   font-size: 28rpx;
+  font-weight: 400;
   line-height: 1.5;
   box-sizing: border-box;
 }
@@ -16,14 +26,17 @@ page {
 view,
 text,
 input,
+textarea,
 button,
 picker {
   box-sizing: border-box;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  font-weight: 400;
 }
 
 .page {
   min-height: 100vh;
-  padding: 32rpx 40rpx 48rpx;
+  padding: 28rpx 28rpx 48rpx;
 }
 
 .muted {
@@ -31,7 +44,77 @@ picker {
 }
 
 .amount {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
   font-variant-numeric: tabular-nums;
-  font-family: "SF Mono", "Menlo", "Courier New", monospace;
-  letter-spacing: -1rpx;
+  font-feature-settings: "tnum";
+  letter-spacing: 0;
+}
+
+.income {
+  color: var(--income);
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 8rpx 28rpx;
+}
+
+.cat-badge {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cat-badge .cat-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.record-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 72rpx;
+  gap: 8rpx;
+}
+
+.record-amount {
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  font-size: 30rpx;
+  line-height: 1;
+}
+
+.delete-btn {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: var(--fill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.delete-icon {
+  width: 28rpx;
+  height: 28rpx;
+  display: block;
+  opacity: 0.45;
+}
+
+.delete-btn:active {
+  background: #e8e2d6;
+}
+
+.delete-btn:active .delete-icon {
+  opacity: 0.8;
 }

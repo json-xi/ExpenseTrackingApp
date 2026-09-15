@@ -1,23 +1,27 @@
-<view class="page stats-page">
+<view class="page stats-page {{dockOpen ? '' : 'dock-folded'}}">
   <view class="overview">
-    <text class="overview-label muted">{{overviewLabel}} 总览</text>
+    <view class="book-chip" bindtap="onOpenBooks">
+      <text class="book-chip-name">{{bookName}}</text>
+      <text class="book-chip-arrow">›</text>
+    </view>
+    <text class="overview-label">{{overviewLabel}} 总览</text>
     <text class="overview-value amount">¥{{expenseText}}</text>
-    <text class="overview-hint muted">支出</text>
+    <text class="overview-hint">支出</text>
     <view class="pair">
       <view class="pair-item">
-        <text class="muted">收入</text>
+        <text class="pair-label">收入</text>
         <text class="pair-value amount income">¥{{incomeText}}</text>
       </view>
       <view class="pair-item">
-        <text class="muted">结余</text>
-        <text class="pair-value amount {{balance >= 0 ? 'income' : ''}}">{{balancePrefix}}¥{{balanceAbs}}</text>
+        <text class="pair-label">结余</text>
+        <text class="pair-value amount {{balance >= 0 ? 'income' : 'expense'}}">{{balancePrefix}}¥{{balanceAbs}}</text>
       </view>
     </view>
   </view>
 
-  <view class="block" wx:if="{{advice.length > 0}}">
+  <view class="card block" wx:if="{{advice.length > 0}}">
     <view class="block-head" bindtap="onToggleAdvice">
-      <text class="block-title muted">建议 · {{advice.length}} 条</text>
+      <text class="block-title">建议 · {{advice.length}} 条</text>
       <view class="toggle">
         <text>{{adviceOpen ? '收起' : '展开'}}</text>
         <image class="toggle-icon" src="{{adviceOpen ? '/assets/icons/chevron-up.png' : '/assets/icons/chevron-down.png'}}" mode="aspectFit" />
@@ -31,9 +35,9 @@
     </block>
   </view>
 
-  <view class="block">
+  <view class="card block">
     <view class="block-head {{listCollapsible ? '' : 'plain'}}" bindtap="onToggleList">
-      <text class="block-title muted">
+      <text class="block-title">
         {{listTitle}}<text wx:if="{{listCountText}}"> · {{listCountText}}</text>
       </text>
       <view class="toggle" wx:if="{{listCollapsible}}">
@@ -81,22 +85,22 @@
         </view>
         <view class="record" wx:for="{{item.items}}" wx:for-item="rec" wx:key="id">
           <view class="record-left">
-            <image class="cat-icon" src="{{rec.icon}}" mode="aspectFit" />
+            <view class="cat-badge">
+              <image class="cat-icon" src="{{rec.icon}}" mode="aspectFit" />
+            </view>
             <view class="record-meta">
               <text class="record-cat">{{rec.categoryName}}</text>
               <text class="record-note muted" wx:if="{{rec.note}}">{{rec.note}}</text>
             </view>
           </view>
-          <text class="record-amount amount {{rec.type === 'income' ? 'income' : ''}}">
-            {{rec.sign}}¥{{rec.amountText}}
-          </text>
-          <image
-            class="delete-icon"
-            src="/assets/icons/trash.png"
-            mode="aspectFit"
-            data-id="{{rec.id}}"
-            catchtap="onDeleteRecord"
-          />
+          <view class="record-right">
+            <view class="record-amount {{rec.type === 'income' ? 'income' : ''}}">
+              <text class="amount">{{rec.sign}}¥{{rec.amountText}}</text>
+            </view>
+            <view class="delete-btn" data-id="{{rec.id}}" catchtap="onDeleteRecord">
+              <image class="delete-icon" src="/assets/icons/trash.png" mode="aspectFit" />
+            </view>
+          </view>
         </view>
       </view>
     </block>
@@ -106,7 +110,7 @@
     </view>
   </view>
 
-  <view class="block" wx:if="{{stats.length > 0}}">
+  <view class="card block" wx:if="{{stats.length > 0}}">
     <view class="tabs">
       <text
         class="tab {{statType === 'expense' ? 'active' : ''}}"
@@ -122,7 +126,9 @@
     <view class="stat-row" wx:for="{{stats}}" wx:key="id">
       <view class="stat-top">
         <view class="stat-name-wrap">
-          <image class="cat-icon" src="{{item.icon}}" mode="aspectFit" />
+          <view class="cat-badge cat-badge-sm">
+            <image class="cat-icon" src="{{item.icon}}" mode="aspectFit" />
+          </view>
           <text class="stat-name">{{item.name}}</text>
         </view>
         <text class="stat-meta amount muted">¥{{item.amountText}} · {{item.percent}}%</text>
@@ -133,8 +139,16 @@
     </view>
   </view>
 
-  <view class="dock">
-    <view class="period-bar">
+  <view class="dock {{dockOpen ? '' : 'collapsed'}}">
+    <view class="dock-toggle" bindtap="onToggleDock">
+      <image
+        class="dock-toggle-icon"
+        src="{{dockOpen ? '/assets/icons/chevron-down.png' : '/assets/icons/chevron-up.png'}}"
+        mode="aspectFit"
+      />
+      <text class="dock-toggle-text" wx:if="{{!dockOpen}}">{{periodLabel}} · {{scopeLabel}}</text>
+    </view>
+    <view class="dock-row" wx:if="{{dockOpen}}">
       <view class="nav" bindtap="onPrevPeriod">‹</view>
       <picker
         class="period-picker"
@@ -150,9 +164,6 @@
         </view>
       </picker>
       <view class="nav {{canNext ? '' : 'disabled'}}" bindtap="onNextPeriod">›</view>
-    </view>
-
-    <view class="dock-row">
       <view class="scope-switch">
         <view
           class="scope {{scope === 'day' ? 'active' : ''}}"
@@ -170,11 +181,8 @@
           bindtap="onSwitchScope"
         >年</view>
       </view>
-      <view class="dock-actions">
-        <view class="pill" bindtap="onOpenSearch">
-          <image class="search-icon" src="/assets/icons/search.png" mode="aspectFit" />
-          <text class="pill-text muted">搜索</text>
-        </view>
+      <view class="search-btn" bindtap="onOpenSearch">
+        <image class="search-icon" src="/assets/icons/search.png" mode="aspectFit" />
       </view>
     </view>
   </view>

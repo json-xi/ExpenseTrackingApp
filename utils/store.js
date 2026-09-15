@@ -2,6 +2,12 @@ const STORAGE_KEY = 'expense_records_v1'
 const PROFILE_KEY = 'expense_profile_v1'
 const FEEDBACK_KEY = 'expense_feedback_v1'
 const LAST_CAT_KEY = 'expense_last_cats_v1'
+const BOOKS_KEY = 'expense_books_v1'
+
+const DEFAULT_BOOK_ID = 'default'
+const DEFAULT_BOOK_NAME = '日常账本'
+const MAX_BOOKS = 12
+const MAX_BOOK_NAME = 8
 
 const ICON_DIR = '/assets/icons/'
 
@@ -13,6 +19,14 @@ const EXPENSE_CATEGORIES = [
   { id: 'fun', name: '娱乐', icon: ICON_DIR + 'cat-fun.png' },
   { id: 'health', name: '医疗', icon: ICON_DIR + 'cat-health.png' },
   { id: 'edu', name: '学习', icon: ICON_DIR + 'cat-edu.png' },
+  { id: 'clothes', name: '服饰', icon: ICON_DIR + 'cat-clothes.png' },
+  { id: 'sports', name: '运动', icon: ICON_DIR + 'cat-sports.png' },
+  { id: 'travel', name: '旅行', icon: ICON_DIR + 'cat-travel.png' },
+  { id: 'pet', name: '宠物', icon: ICON_DIR + 'cat-pet.png' },
+  { id: 'insurance', name: '保险', icon: ICON_DIR + 'cat-insurance.png' },
+  { id: 'charity', name: '公益', icon: ICON_DIR + 'cat-charity.png' },
+  { id: 'transfer', name: '转账', icon: ICON_DIR + 'cat-transfer.png' },
+  { id: 'redpack', name: '发红包', icon: ICON_DIR + 'cat-redpack.png' },
   { id: 'other_out', name: '其他', icon: ICON_DIR + 'cat-other.png' }
 ]
 
@@ -20,7 +34,10 @@ const INCOME_CATEGORIES = [
   { id: 'salary', name: '工资', icon: ICON_DIR + 'cat-salary.png' },
   { id: 'side', name: '兼职', icon: ICON_DIR + 'cat-side.png' },
   { id: 'invest', name: '理财', icon: ICON_DIR + 'cat-invest.png' },
-  { id: 'gift', name: '红包', icon: ICON_DIR + 'cat-gift.png' },
+  { id: 'bonus', name: '奖金', icon: ICON_DIR + 'cat-bonus.png' },
+  { id: 'business', name: '生意', icon: ICON_DIR + 'cat-business.png' },
+  { id: 'gift', name: '收红包', icon: ICON_DIR + 'cat-gift.png' },
+  { id: 'favor', name: '人情', icon: ICON_DIR + 'cat-favor.png' },
   { id: 'other_in', name: '其他', icon: ICON_DIR + 'cat-other.png' }
 ]
 
@@ -57,7 +74,7 @@ function formatMoney(n) {
   return num.toFixed(2)
 }
 
-function getRecords() {
+function getAllRecords() {
   try {
     const list = wx.getStorageSync(STORAGE_KEY)
     return Array.isArray(list) ? list : []
@@ -70,10 +87,20 @@ function saveRecords(list) {
   wx.setStorageSync(STORAGE_KEY, list)
 }
 
+function recordBookId(item) {
+  return item.bookId || DEFAULT_BOOK_ID
+}
+
+function getRecords() {
+  const bookId = getCurrentBookId()
+  return getAllRecords().filter((item) => recordBookId(item) === bookId)
+}
+
 function addRecord(record) {
-  const list = getRecords()
+  const list = getAllRecords()
   const item = {
     id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    bookId: record.bookId || getCurrentBookId(),
     type: record.type,
     amount: Number(record.amount),
     categoryId: record.categoryId,
@@ -89,9 +116,117 @@ function addRecord(record) {
 }
 
 function deleteRecord(id) {
-  const list = getRecords().filter((item) => item.id !== id)
+  const list = getAllRecords().filter((item) => item.id !== id)
   saveRecords(list)
   return list
+}
+
+function normalizeBookName(name) {
+  return `${name || ''}`.replace(/\s+/g, ' ').trim()
+}
+
+function getBookState() {
+  try {
+    const data = wx.getStorageSync(BOOKS_KEY)
+    if (data && Array.isArray(data.books) && data.books.length) {
+      const currentId = data.books.some((book) => book.id === data.currentId)
+        ? data.currentId
+        : data.books[0].id
+      return { books: data.books, currentId }
+    }
+  } catch (e) {
+    // 读失败时走默认账本
+  }
+  const state = {
+    books: [{ id: DEFAULT_BOOK_ID, name: DEFAULT_BOOK_NAME, createdAt: Date.now() }],
+    currentId: DEFAULT_BOOK_ID
+  }
+  wx.setStorageSync(BOOKS_KEY, state)
+  return state
+}
+
+function saveBookState(state) {
+  wx.setStorageSync(BOOKS_KEY, state)
+  return state
+}
+
+function getCurrentBookId() {
+  return getBookState().currentId
+}
+
+function getCurrentBook() {
+  const state = getBookState()
+  let i = 0
+  for (; i < state.books.length; i++) {
+    if (state.books[i].id === state.currentId) return state.books[i]
+  }
+  return state.books[0]
+}
+
+function listBooks() {
+  const state = getBookState()
+  const counts = {}
+  getAllRecords().forEach((item) => {
+    const id = recordBookId(item)
+    counts[id] = (counts[id] || 0) + 1
+  })
+  return state.books.map((book) => ({
+    ...book,
+    count: counts[book.id] || 0,
+    current: book.id === state.currentId
+  }))
+}
+
+function setCurrentBook(id) {
+  const state = getBookState()
+  if (!state.books.some((book) => book.id === id)) return getCurrentBook()
+  state.currentId = id
+  saveBookState(state)
+  return getCurrentBook()
+}
+
+function addBook(name) {
+  const trimmed = normalizeBookName(name)
+  if (!trimmed) return { ok: false, reason: 'empty' }
+  if (trimmed.length > MAX_BOOK_NAME) return { ok: false, reason: 'long' }
+  const state = getBookState()
+  if (state.books.length >= MAX_BOOKS) return { ok: false, reason: 'limit' }
+  if (state.books.some((book) => book.name === trimmed)) return { ok: false, reason: 'dup' }
+  const book = {
+    id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    name: trimmed,
+    createdAt: Date.now()
+  }
+  state.books.push(book)
+  state.currentId = book.id
+  saveBookState(state)
+  return { ok: true, book }
+}
+
+function renameBook(id, name) {
+  const trimmed = normalizeBookName(name)
+  if (!trimmed) return { ok: false, reason: 'empty' }
+  if (trimmed.length > MAX_BOOK_NAME) return { ok: false, reason: 'long' }
+  const state = getBookState()
+  const book = state.books.find((item) => item.id === id)
+  if (!book) return { ok: false, reason: 'missing' }
+  if (state.books.some((item) => item.id !== id && item.name === trimmed)) {
+    return { ok: false, reason: 'dup' }
+  }
+  book.name = trimmed
+  saveBookState(state)
+  return { ok: true, book }
+}
+
+function deleteBook(id) {
+  const state = getBookState()
+  if (state.books.length <= 1) return { ok: false, reason: 'last' }
+  const nextBooks = state.books.filter((book) => book.id !== id)
+  if (nextBooks.length === state.books.length) return { ok: false, reason: 'missing' }
+  const currentId = state.currentId === id ? nextBooks[0].id : state.currentId
+  saveBookState({ books: nextBooks, currentId })
+  saveRecords(getAllRecords().filter((item) => recordBookId(item) !== id))
+  return { ok: true, currentId }
 }
 
 function getLastCats() {
@@ -526,6 +661,15 @@ module.exports = {
   getRecords,
   addRecord,
   deleteRecord,
+  MAX_BOOKS,
+  MAX_BOOK_NAME,
+  getCurrentBook,
+  getCurrentBookId,
+  listBooks,
+  setCurrentBook,
+  addBook,
+  renameBook,
+  deleteBook,
   getCategories,
   rememberCategory,
   lastCategoryId,

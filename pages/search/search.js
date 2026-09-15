@@ -8,6 +8,11 @@ Page({
     incomeText: '0.00'
   },
 
+  onShow() {
+    wx.setNavigationBarTitle({ title: `搜索 · ${store.getCurrentBook().name}` })
+    if (this.data.keyword) this.search()
+  },
+
   onInput(e) {
     this.setData({ keyword: e.detail.value }, () => this.search())
   },

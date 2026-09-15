@@ -1,53 +1,69 @@
 <view class="page">
-  <view class="profile">
-    <button
-      class="avatar-btn"
-      open-type="chooseAvatar"
-      bindchooseavatar="onChooseAvatar"
-      hover-class="none"
-    >
-      <image class="avatar" src="{{avatar || defaultAvatar}}" mode="aspectFill" />
-      <view class="avatar-edit">
-        <image class="avatar-edit-icon" src="/assets/icons/camera.png" mode="aspectFit" />
+  <view class="card profile-card">
+    <view class="profile">
+      <button
+        class="avatar-btn"
+        open-type="chooseAvatar"
+        bindchooseavatar="onChooseAvatar"
+        hover-class="none"
+      >
+        <image class="avatar" src="{{avatar || defaultAvatar}}" mode="aspectFill" />
+        <view class="avatar-edit">
+          <image class="avatar-edit-icon" src="/assets/icons/camera.png" mode="aspectFit" />
+        </view>
+      </button>
+
+      <view class="profile-info">
+        <input
+          class="nickname-input"
+          type="nickname"
+          value="{{nickname}}"
+          placeholder="点击填写昵称"
+          placeholder-class="nickname-placeholder"
+          bindblur="onNicknameChange"
+        />
+        <text class="profile-hint muted">
+          {{logged ? '资料仅保存在本机' : '点击头像和昵称完善资料'}}
+        </text>
       </view>
-    </button>
+    </view>
 
-    <view class="profile-info">
-      <input
-        class="nickname-input"
-        type="nickname"
-        value="{{nickname}}"
-        placeholder="点击填写昵称"
-        placeholder-class="nickname-placeholder"
-        bindblur="onNicknameChange"
-      />
-      <text class="profile-hint muted">
-        {{logged ? '资料仅保存在本机' : '点击头像和昵称完善资料'}}
-      </text>
-    </view>
-  </view>
-
-  <view class="stat-bar">
-    <view class="stat-cell">
-      <text class="stat-value amount">{{overall.count}}</text>
-      <text class="stat-label muted">总笔数</text>
-    </view>
-    <view class="stat-cell">
-      <text class="stat-value amount">{{overall.days}}</text>
-      <text class="stat-label muted">记账天数</text>
-    </view>
-    <view class="stat-cell">
-      <text class="stat-value amount">{{firstDateText}}</text>
-      <text class="stat-label muted">首次记账</text>
+    <view class="stat-bar">
+      <view class="stat-cell">
+        <text class="stat-value amount">{{overall.count}}</text>
+        <text class="stat-label muted">总笔数</text>
+      </view>
+      <view class="stat-cell">
+        <text class="stat-value amount">{{overall.days}}</text>
+        <text class="stat-label muted">记账天数</text>
+      </view>
+      <view class="stat-cell">
+        <text class="stat-value amount">{{firstDateText}}</text>
+        <text class="stat-label muted">首次记账</text>
+      </view>
     </view>
   </view>
 
   <text class="backup-hint muted">账单只保存在本机，换手机请先导出</text>
 
-  <view class="menu">
+  <view class="card menu">
+    <view class="menu-item" bindtap="onOpenBooks">
+      <view class="menu-left">
+        <view class="menu-icon-wrap">
+          <text class="menu-icon-text">账</text>
+        </view>
+        <text>账本</text>
+      </view>
+      <view class="menu-right">
+        <text class="muted">{{bookName}}</text>
+        <text class="arrow muted">›</text>
+      </view>
+    </view>
     <view class="menu-item" bindtap="onExport">
       <view class="menu-left">
-        <image class="menu-icon" src="/assets/icons/export.png" mode="aspectFit" />
+        <view class="menu-icon-wrap">
+          <image class="menu-icon" src="/assets/icons/export.png" mode="aspectFit" />
+        </view>
         <text>导出账单</text>
       </view>
       <view class="menu-right">
@@ -56,7 +72,9 @@
     </view>
     <view class="menu-item" bindtap="onFeedback">
       <view class="menu-left">
-        <image class="menu-icon" src="/assets/icons/feedback.png" mode="aspectFit" />
+        <view class="menu-icon-wrap">
+          <image class="menu-icon" src="/assets/icons/feedback.png" mode="aspectFit" />
+        </view>
         <text>意见反馈</text>
       </view>
       <view class="menu-right">

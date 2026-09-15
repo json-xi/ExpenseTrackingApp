@@ -29,7 +29,7 @@ function truncateGroups(groups, limit) {
 
 Page({
   data: {
-    scope: 'day',
+    scope: 'month',
     period: '',
     today: '',
     periodLabel: '',
@@ -44,18 +44,24 @@ Page({
     adviceOpen: false,
     statType: 'expense',
     stats: [],
-    listTitle: LIST_TITLE.day,
-    emptyText: EMPTY_TEXT.day,
+    listTitle: LIST_TITLE.month,
+    emptyText: EMPTY_TEXT.month,
     showGroupHead: false,
     groups: [],
     monthRows: [],
     listCountText: '',
     listCollapsible: false,
     listOpen: false,
-    listExpanded: true
+    listExpanded: true,
+    dockOpen: true,
+    scopeLabel: '月',
+    bookName: ''
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 })
+    }
     if (!this.data.period) {
       this.setData({
         period: store.currentPeriod(this.data.scope),
@@ -73,6 +79,7 @@ Page({
     const advice = store.buildAdvice(summaryRecords, scope, period)
     const adviceKey = scope + ':' + period
     const next = {
+      bookName: store.getCurrentBook().name,
       periodLabel: store.formatPeriodLabel(scope, period),
       overviewLabel: store.formatPeriodLabel(scope, period),
       canNext: period < store.currentPeriod(scope),
@@ -88,6 +95,7 @@ Page({
       })),
       listTitle: LIST_TITLE[scope],
       emptyText: EMPTY_TEXT[scope],
+      scopeLabel: scope === 'day' ? '天' : scope === 'year' ? '年' : '月',
       showGroupHead: scope !== 'day',
       ...this.buildList()
     }
@@ -210,5 +218,13 @@ Page({
 
   onOpenSearch() {
     wx.navigateTo({ url: '/pages/search/search' })
+  },
+
+  onOpenBooks() {
+    wx.navigateTo({ url: '/pages/books/books?back=1' })
+  },
+
+  onToggleDock() {
+    this.setData({ dockOpen: !this.data.dockOpen })
   }
 })

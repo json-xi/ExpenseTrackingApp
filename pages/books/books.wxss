@@ -1,0 +1,91 @@
+.hint {
+  display: block;
+  margin: 4rpx 8rpx 24rpx;
+  font-size: 24rpx;
+}
+
+.list {
+  padding: 4rpx 8rpx 4rpx 28rpx;
+}
+
+.book-row {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 8rpx 8rpx 0;
+}
+
+.book-row + .book-row {
+  border-top: 1rpx solid var(--line);
+}
+
+.book-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  padding: 20rpx 16rpx 20rpx 0;
+}
+
+.book-main:active {
+  opacity: 0.55;
+}
+
+.book-name {
+  font-size: 30rpx;
+}
+
+.book-meta {
+  font-size: 22rpx;
+}
+
+.book-current {
+  flex-shrink: 0;
+  margin-right: 8rpx;
+  padding: 4rpx 14rpx;
+  font-size: 20rpx;
+  color: var(--brand);
+  background: var(--brand-soft);
+  border-radius: 999rpx;
+}
+
+.book-more {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  line-height: 1;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.book-more:active {
+  opacity: 0.55;
+}
+
+.add-btn {
+  margin-top: 40rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #fff;
+  background: var(--brand);
+  border-radius: 999rpx;
+  box-shadow: var(--shadow);
+}
+
+.add-btn:active {
+  opacity: 0.85;
+}
+
+.tip {
+  display: block;
+  margin-top: 20rpx;
+  font-size: 22rpx;
+  text-align: center;
+}

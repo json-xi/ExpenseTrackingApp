@@ -1,0 +1,17 @@
+<view class="page">
+  <text class="hint muted">不同账本的账单互不影响，点名称即可切换</text>
+
+  <view class="card list">
+    <view class="book-row" wx:for="{{books}}" wx:key="id">
+      <view class="book-main" data-id="{{item.id}}" bindtap="onSelect">
+        <text class="book-name">{{item.name}}</text>
+        <text class="book-meta muted">{{item.count}} 笔</text>
+      </view>
+      <text class="book-current" wx:if="{{item.current}}">当前</text>
+      <view class="book-more" data-id="{{item.id}}" data-name="{{item.name}}" data-count="{{item.count}}" catchtap="onMore">⋯</view>
+    </view>
+  </view>
+
+  <view class="add-btn" bindtap="onAdd">新建账本</view>
+  <text class="tip muted">最多 {{maxBooks}} 个账本，名称不超过 {{maxName}} 个字</text>
+</view>

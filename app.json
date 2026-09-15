@@ -4,18 +4,21 @@
     "pages/record/record",
     "pages/mine/mine",
     "pages/search/search",
-    "pages/feedback/feedback"
+    "pages/feedback/feedback",
+    "pages/export/export",
+    "pages/books/books"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#FAFAFA",
-    "navigationBarTitleText": "记账",
+    "navigationBarBackgroundColor": "#EEF4F2",
+    "navigationBarTitleText": "嘟来记账",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#FAFAFA",
+    "backgroundColor": "#EEF4F2",
     "backgroundTextStyle": "dark"
   },
   "tabBar": {
-    "color": "#999999",
-    "selectedColor": "#1A1A1A",
+    "custom": true,
+    "color": "#7A8884",
+    "selectedColor": "#2A8A7A",
     "backgroundColor": "#FFFFFF",
     "borderStyle": "white",
     "list": [

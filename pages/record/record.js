@@ -143,12 +143,62 @@ function formatDisplay(expr) {
   return prefixYen(expr + '=' + formatResult(evalExpr(expr)))
 }
 
+const QUICK_CAT_COUNT = 3
+
+function buildCatView(type, preferredId) {
+  const all = store.getCategories(type)
+  if (!all.length) {
+    return { quickCats: [], moreCats: [], categoryId: '', categoryName: '' }
+  }
+  let selected = null
+  let i = 0
+  for (; i < all.length; i++) {
+    if (all[i].id === preferredId) {
+      selected = all[i]
+      break
+    }
+  }
+  if (!selected) {
+    const last = store.lastCategoryId(type)
+    for (i = 0; i < all.length; i++) {
+      if (all[i].id === last) {
+        selected = all[i]
+        break
+      }
+    }
+  }
+  if (!selected) selected = all[0]
+
+  const quick = [selected]
+  const used = {}
+  used[selected.id] = true
+  for (i = 0; i < all.length && quick.length < QUICK_CAT_COUNT; i++) {
+    if (!used[all[i].id]) {
+      quick.push(all[i])
+      used[all[i].id] = true
+    }
+  }
+  const more = []
+  for (i = 0; i < all.length; i++) {
+    if (!used[all[i].id]) more.push(all[i])
+  }
+  return {
+    quickCats: quick,
+    moreCats: more,
+    categoryId: selected.id,
+    categoryName: selected.name
+  }
+}
+
 Page({
   data: {
     type: 'expense',
     amount: '',
     amountView: '0.00',
     categories: [],
+    quickCats: [],
+    moreCats: [],
+    catMoreOpen: false,
     categoryId: '',
     categoryName: '',
     date: '',
@@ -162,19 +212,18 @@ Page({
     sessionRecords: [],
     sessionText: '',
     saveAsBackTop: false,
-    noteLabel: '备注'
+    noteLabel: '备注',
+    padOpen: true,
+    bookName: ''
   },
 
   onLoad() {
     const today = store.formatDate(new Date())
-    const picked = store.pickCategory('expense')
     this.setData({
       date: today,
       today,
       dateLabel: store.formatPeriodLabel('day', today),
-      categories: picked.categories,
-      categoryId: picked.categoryId,
-      categoryName: picked.categoryName
+      ...buildCatView('expense')
     })
     this.onKeyboardHeight = (res) => {
       if (this.data.noteOpen) {
@@ -184,6 +233,15 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 })
+    }
+    const book = store.getCurrentBook()
+    if (this._bookId && this._bookId !== book.id) {
+      this.applySession([])
+    }
+    this._bookId = book.id
+    this.setData({ bookName: book.name })
     wx.onKeyboardHeightChange(this.onKeyboardHeight)
   },
 
@@ -206,13 +264,7 @@ Page({
   onSwitchType(e) {
     const type = e.currentTarget.dataset.type
     if (type === this.data.type) return
-    const picked = store.pickCategory(type)
-    this.setData({
-      type: type,
-      categories: picked.categories,
-      categoryId: picked.categoryId,
-      categoryName: picked.categoryName
-    })
+    this.setData(Object.assign({ type: type, catMoreOpen: false }, buildCatView(type)))
   },
 
   onKeyTap(e) {
@@ -235,10 +287,19 @@ Page({
 
   onSelectCategory(e) {
     const id = e.currentTarget.dataset.id
-    const name = e.currentTarget.dataset.name
-    this.setData({ categoryId: id, categoryName: name })
     store.rememberCategory(this.data.type, id)
+    this.setData(Object.assign({ catMoreOpen: false }, buildCatView(this.data.type, id)))
   },
+
+  onOpenMoreCats() {
+    this.setData({ catMoreOpen: true })
+  },
+
+  onCloseMoreCats() {
+    this.setData({ catMoreOpen: false })
+  },
+
+  onCatSheetTap() {},
 
   onDateChange(e) {
     const date = e.detail.value
@@ -291,14 +352,10 @@ Page({
     })
 
     this.applyAmount('')
-    const picked = store.pickCategory(this.data.type)
-    this.setData({
+    this.setData(Object.assign({
       note: '',
-      noteLabel: '备注',
-      categories: picked.categories,
-      categoryId: picked.categoryId,
-      categoryName: picked.categoryName
-    })
+      noteLabel: '备注'
+    }, buildCatView(this.data.type, this.data.categoryId)))
     this.applySession([this.decorate(record), ...this.data.sessionRecords])
     wx.showToast({ title: '已记下', icon: 'none', duration: 900 })
   },
@@ -376,11 +433,15 @@ Page({
     })
   },
 
-  onOpenSearch() {
-    wx.navigateTo({ url: '/pages/search/search' })
+  onTogglePad() {
+    this.setData({ padOpen: !this.data.padOpen })
   },
 
   onGoStats() {
     wx.switchTab({ url: '/pages/stats/stats' })
+  },
+
+  onOpenBooks() {
+    wx.navigateTo({ url: '/pages/books/books?back=1' })
   }
 })
